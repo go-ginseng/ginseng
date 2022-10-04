@@ -35,7 +35,12 @@ type route struct {
 // NewEngine create a new engine
 func NewEngine() *Engine {
 	return &Engine{
-		gin: gin.Default(),
+		gin:          gin.Default(),
+		initFuncs:    make([]func(), 0),
+		middleware:   make([]gin.HandlerFunc, 0),
+		routes:       make([]route, 0),
+		preRunFuncs:  make([]func(), 0),
+		registerKeys: make(map[string]bool),
 	}
 }
 
