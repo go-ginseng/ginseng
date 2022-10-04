@@ -11,6 +11,11 @@ type Context[T any] struct {
 	param    map[string]interface{} // additional parameters
 }
 
+// Get Gin context
+func (c *Context[T]) GinCtx() *gin.Context {
+	return c.ginCtx
+}
+
 // Get request method
 func (ctx *Context[T]) Method() string {
 	return ctx.ginCtx.Request.Method
