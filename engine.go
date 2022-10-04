@@ -40,18 +40,18 @@ func NewEngine() *Engine {
 }
 
 // PrependInitFunc prepend the init functions
-func PrependInitFunc(e *Engine, f ...func()) {
+func (e *Engine) PrependInitFunc(f ...func()) {
 	e.initFuncs = append(f, e.initFuncs...)
 }
 
 // AppendInitFunc append the init functions
-func AppendInitFunc(e *Engine, f ...func()) {
+func (e *Engine) AppendInitFunc(f ...func()) {
 	e.initFuncs = append(e.initFuncs, f...)
 }
 
 // PrependMiddleware prepend the middleware functions
 // The generic type of the general middleware should be struct{}
-func PrependMiddleware(e *Engine, middleware ...HandlerFunc[struct{}]) {
+func (e *Engine) PrependMiddleware(middleware ...HandlerFunc[struct{}]) {
 	ginHandlers := make([]gin.HandlerFunc, len(middleware))
 	for i, m := range middleware {
 		ginHandlers[i] = _toGinHandler(e, m)
@@ -61,7 +61,7 @@ func PrependMiddleware(e *Engine, middleware ...HandlerFunc[struct{}]) {
 
 // AppendMiddleware append the middleware functions
 // The generic type of the general middleware should be struct{}
-func AppendMiddleware(e *Engine, middleware ...HandlerFunc[struct{}]) {
+func (e *Engine) AppendMiddleware(middleware ...HandlerFunc[struct{}]) {
 	ginHandlers := make([]gin.HandlerFunc, len(middleware))
 	for i, m := range middleware {
 		ginHandlers[i] = _toGinHandler(e, m)
@@ -70,11 +70,16 @@ func AppendMiddleware(e *Engine, middleware ...HandlerFunc[struct{}]) {
 }
 
 // PrependPreRunFunc prepend the pre-run functions
-func PrependPreRunFunc(e *Engine, f func()) {
+func (e *Engine) PrependPreRunFunc(f func()) {
 	e.preRunFuncs = append([]func(){f}, e.preRunFuncs...)
 }
 
 // AppendPreRunFunc append the pre-run functions
-func AppendPreRunFunc(e *Engine, f func()) {
+func (e *Engine) AppendPreRunFunc(f func()) {
 	e.preRunFuncs = append(e.preRunFuncs, f)
+}
+
+// Run start the engine
+func (e *Engine) Run(addr string) error {
+	return e.gin.Run(addr)
 }
