@@ -83,7 +83,7 @@ func (e *Engine) Run(addr string) error {
 
 // CheckDependencies check the dependencies
 // If the dependencies are not registered, it will panic
-func (e *Engine) CheckDependencies(pluginIDs []string) {
+func (e *Engine) CheckDependencies(pluginIDs ...string) {
 	for _, pluginID := range pluginIDs {
 		if _, ok := e.registerKeys[pluginID]; !ok {
 			panic("The plugin " + pluginID + " is not registered")
