@@ -82,8 +82,29 @@ func (e *Engine) AppendPreRunFunc(f func()) {
 }
 
 // Run start the engine
-func (e *Engine) Run(addr string) error {
-	return e.gin.Run(addr)
+func (e *Engine) Run(addr string) {
+	// init func
+	for _, f := range e.initFuncs {
+		f()
+	}
+
+	// middleware
+	for _, m := range e.middleware {
+		e.Gin().Use(m)
+	}
+
+	// route
+	for _, r := range e.routes {
+		e.Gin().Handle(r.method, r.path, r.handlers...)
+	}
+
+	// pre func
+	for _, f := range e.preRunFuncs {
+		f()
+	}
+
+	// run
+	e.Gin().Run(addr)
 }
 
 // CheckDependencies check the dependencies
