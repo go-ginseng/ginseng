@@ -20,6 +20,9 @@ type Engine struct {
 
 	// Pre-run functions will be called after the routes are set up and before the engine is started
 	preRunFuncs []func()
+
+	//
+	registerKeys map[string]bool
 }
 
 // route store the route information
