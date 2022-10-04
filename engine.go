@@ -56,22 +56,14 @@ func (e *Engine) AppendInitFunc(f ...func()) {
 
 // PrependMiddleware prepend the middleware functions
 // The generic type of the general middleware should be struct{}
-func (e *Engine) PrependMiddleware(middleware ...HandlerFunc[struct{}]) {
-	ginHandlers := make([]gin.HandlerFunc, len(middleware))
-	for i, m := range middleware {
-		ginHandlers[i] = _toGinHandler(e, m)
-	}
-	e.middleware = append(ginHandlers, e.middleware...)
+func (e *Engine) PrependMiddleware(middleware ...gin.HandlerFunc) {
+	e.middleware = append(middleware, e.middleware...)
 }
 
 // AppendMiddleware append the middleware functions
 // The generic type of the general middleware should be struct{}
-func (e *Engine) AppendMiddleware(middleware ...HandlerFunc[struct{}]) {
-	ginHandlers := make([]gin.HandlerFunc, len(middleware))
-	for i, m := range middleware {
-		ginHandlers[i] = _toGinHandler(e, m)
-	}
-	e.middleware = append(e.middleware, ginHandlers...)
+func (e *Engine) AppendMiddleware(middleware ...gin.HandlerFunc) {
+	e.middleware = append(e.middleware, middleware...)
 }
 
 // PrependPreRunFunc prepend the pre-run functions
