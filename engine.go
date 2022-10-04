@@ -39,6 +39,11 @@ func NewEngine() *Engine {
 	}
 }
 
+// Get gin engine
+func (e *Engine) Gin() *gin.Engine {
+	return e.gin
+}
+
 // PrependInitFunc prepend the init functions
 func (e *Engine) PrependInitFunc(f ...func()) {
 	e.initFuncs = append(f, e.initFuncs...)
