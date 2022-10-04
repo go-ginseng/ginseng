@@ -11,31 +11,27 @@ import (
 type HandlerFunc[T any] func(*Context[T])
 
 // Get setup the GET route
-func Get[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...HandlerFunc[T]) {
+func Get[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...gin.HandlerFunc) {
 	_setupRoute(e, "GET", path, handler, middleware...)
 }
 
 // Post setup the POST route
-func Post[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...HandlerFunc[T]) {
+func Post[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...gin.HandlerFunc) {
 	_setupRoute(e, "POST", path, handler, middleware...)
 }
 
 // Put setup the PUT route
-func Put[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...HandlerFunc[T]) {
+func Put[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...gin.HandlerFunc) {
 	_setupRoute(e, "PUT", path, handler, middleware...)
 }
 
 // Delete setup the DELETE route
-func Delete[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...HandlerFunc[T]) {
+func Delete[T any](e *Engine, path string, handler HandlerFunc[T], middleware ...gin.HandlerFunc) {
 	_setupRoute(e, "DELETE", path, handler, middleware...)
 }
 
-func _setupRoute[T any](e *Engine, method string, path string, handler HandlerFunc[T], middleware ...HandlerFunc[T]) {
-	ginHandlers := make([]gin.HandlerFunc, len(middleware))
-	for i, m := range middleware {
-		ginHandlers[i] = _toGinHandler(e, m)
-	}
-	ginHandlers = append(ginHandlers, _toGinHandler(e, handler))
+func _setupRoute[T any](e *Engine, method string, path string, handler HandlerFunc[T], middleware ...gin.HandlerFunc) {
+	ginHandlers := append(middleware, _toGinHandler(e, handler))
 	e.routes = append(e.routes, route{
 		method:   method,
 		path:     path,
